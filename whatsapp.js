@@ -64,7 +64,22 @@ const createSession = async (sessionId, isLegacy = false, res = null) => {
         auth: state,
         printQRInTerminal: true,
         logger,
-        browser: Browsers.ubuntu('Chrome'),
+        browser: Browsers.macOS('Safari'),
+        getMessage: async (key) => {
+            if (store) {
+                if (key.remoteJid === null || key.id === null) {
+                    return undefined
+                }
+
+                const msg = await store.loadMessage(key.remoteJid, key.id)
+                return msg?.message || undefined
+            }
+
+            // Only if store is present
+            return {
+                conversation: 'hello',
+            }
+        },
     }
 
     /**
